@@ -41,11 +41,11 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     reset(){
         this.isFiring = false;
-        this.y = game.config.height - borderUISize - borderPadding;
+        this.y = game.config.height - borderUISize - borderPadding - 25;
             
         //randomize the x position after missing
-        //this.x = Math.random() * 
-        //((game.config.width - borderUISize - borderPadding) - (borderUISize + borderPadding)) + borderUISize + borderPadding;
+        this.x = Math.random() * 
+        ((game.config.width - borderUISize - borderPadding) - (borderUISize + borderPadding)) + borderUISize + borderPadding;
         //this.x = borderUISize + borderPadding;
     }
 }
