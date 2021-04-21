@@ -6,15 +6,16 @@ class Play extends Phaser.Scene{
     preload(){
         // load the images/tile sprites
         this.load.image('rocket', './assets/playercycle.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('spaceship', './assets/enemyCycle.png');
+        this.load.image('starfield', './assets/tronBackground.png');
+        this.load.image('tronUI', './assets/tronUI.png');
 
         // load a spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {
+        this.load.spritesheet('explosion', './assets/tronExplosion.png', {
             frameWidth: 64,
-            frameHeight: 32,
+            frameHeight: 64,
             startFrame: 0,
-            endFrame: 9
+            endFrame: 5
         })
     }
 
@@ -25,11 +26,11 @@ class Play extends Phaser.Scene{
         this.starfield = this.add.tileSprite(0, 0, game.config.width, game.config.height,
              'starfield').setOrigin(0,0);
 
-        // green UI background
+        // Blue UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width,
-            borderUISize * 2, 0x00FF00).setOrigin(0,0);
-        
-        
+            borderUISize * 2, 0x34ADEB).setOrigin(0,0);
+        this.add.rectangle(0, borderUISize + borderPadding + 8, game.config.width,
+            borderUISize*1.5, 0xbbfbfb).setOrigin(0,0);
 
         //add rocket (player 1)
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize -
@@ -39,8 +40,7 @@ class Play extends Phaser.Scene{
         //this.p2Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize -
             //borderPadding, 'rocket').setOrigin(0.0, 0);
 
-        // add line to rocket
-        this.p1RocketLine = new TronPath(this, 0, 0, this.p1Rocket.x, this.p1Rocket.y, this.p1Rocket.x, this.p1Rocket.y, 0xff0000);
+        
 
         // add spaceship (x3)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4,
@@ -50,14 +50,31 @@ class Play extends Phaser.Scene{
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4,
             'spaceship', 0, 10).setOrigin(0, 0);
         
-        // borders
+        // Borders
         let border1 = 0x34ADEB;
+        let border2 = 0x000000;
+        //-------TOP
         this.add.rectangle(0, 0, game.config.width, borderUISize, border1).setOrigin(0,0);
+        this.add.rectangle(0, 8, game.config.width, borderUISize/2, border2).setOrigin(0,0);
+        
+        //-------BOTTOM
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width,
             borderUISize, border1).setOrigin(0,0);
+        this.add.rectangle(0, game.config.height - borderUISize + 10, game.config.width,
+            borderUISize/2, border2).setOrigin(0,0);
+
+        //-------LEFT
         this.add.rectangle(0, 0, borderUISize, game.config.height, border1).setOrigin(0,0);
+        this.add.rectangle(8, 0, borderUISize/2, game.config.height, border2).setOrigin(0,0);
+
+        //-------RIGHT
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height,
             border1).setOrigin(0,0);
+        this.add.rectangle(game.config.width - borderUISize + 8, 0, borderUISize/2, game.config.height,
+            border2).setOrigin(0,0);
+            
+        // TRON UI
+        this.add.image(0, 0, 'tronUI').setOrigin(0,0);
 
         // define keys for rocket p1
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -70,32 +87,51 @@ class Play extends Phaser.Scene{
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', {
                 start: 0,
-                end: 9,
+                end: 5,
                 first: 0
             }),
             frameRate: 30
         });
+
+        // Main Music config
+        this.mainTheme = this.sound.add("mainMusic");
+        var musicConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
+        this.mainTheme.play(musicConfig);
+
 
         // initialize score
         this.p1Score = 0;
 
         // display score
         let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
+            fontFamily: 'Roboto',
+            fontSize: '20px',
+            //backgroundColor: '#00FFE0',
+            color: '#FFFFFF',
+            align: 'center',
             padding:{
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + 10 + borderPadding*2, this.p1Score, scoreConfig);
         
         // GAME OVER flag
         this.gameOver = false;
+
+        //let numx = game.config.width/2;
+        //let numy = game.config.height - borderUISize - borderPadding - 25;
+        // add line to rocket
+        //this.p1RocketLine = new TronPath(this, 0, 0, numx, numy, 0, 0, 0xff0000);
 
         // 60-second play clock
         scoreConfig.fixedWidth = 0;
@@ -109,22 +145,22 @@ class Play extends Phaser.Scene{
     update() {
         // check key input for restart
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.mainTheme.stop();
             this.scene.restart();
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
+            this.mainTheme.stop();
         }
 
         // background movement
-        this.starfield.tilePositionX -= starSpeed;
+        this.starfield.tilePositionY -= starSpeed;
 
         if(!this.gameOver){
             // update rocket
             this.p1Rocket.update();
-            //update line
-            this.p1RocketLine.x = this.p1Rocket;
-            this.p1RocketLine.y = this.p1Rocket;
+            
             // update spaceships
             this.ship01.update();
             this.ship02.update();

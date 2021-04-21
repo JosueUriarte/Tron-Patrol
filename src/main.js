@@ -14,7 +14,7 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 // set speed for background
-let starSpeed = 2;
+let starSpeed = 1;
 
 // reserve keyboard bindings
 let keyF, keyR, keyLEFT, keyRIGHT;
