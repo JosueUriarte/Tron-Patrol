@@ -1,21 +1,37 @@
-class TronPath extends Phaser.GameObjects.Line {
-    constructor(scene, x, y, x1, y1, x2, y2, strokeColor, strokeAlpha){
-        super(scene, x, y, x1, y1, x2, y2, strokeColor, strokeAlpha);
+class TronPath extends Phaser.GameObjects.Sprite {
+    constructor(scene){
+        super(scene);
         scene.add.existing(this);
-
+        this.imageSprite = '';
+        Phaser.GameObjects.Image.call(this, scene, 0, 0, this.imageSprite);
+        this.lifeSpan = 0;
         //this.points = pointValue;
         //this.moveSpeed = game.settings.spaceshipSpeed;
     }
 
-    update(){
+    attach(x, y){
         
-        // wrap around LEFT to RIGHT
-        if(this.x <= 0 - this.width){
-            this.reset();
+        this.setActive(true);
+        this.setVisible(true);
+
+        this.setPosition(x, y - 5);
+        this.lifespan = 500;
+    }
+
+    //set_Texture(image){
+    //    this.imageSprite = image;
+    //}
+
+    update(time, delta){
+        this.lifespan -= delta;
+
+        if (this.lifespan <= 0){
+            this.setActive(false);
+            this.setVisible(false);
         }
     }
 
     reset(){
-        this.x = game.config.width;
+        
     }
 }

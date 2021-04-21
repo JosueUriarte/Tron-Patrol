@@ -1,10 +1,14 @@
-console.log("Rocket pawtrol");
-
 let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [Menu, Play ]
+    scene: [Menu, Play ],
+    physics: {
+        default: "arcade",
+        arcade:{
+            debug: false
+        }
+    }
 }
 
 let game = new Phaser.Game(config);
@@ -17,4 +21,4 @@ let borderPadding = borderUISize / 3;
 let starSpeed = 1;
 
 // reserve keyboard bindings
-let keyF, keyR, keyLEFT, keyRIGHT;
+let keyM, keyB, keyR, keyLEFT, keyRIGHT, keyA, keyD, key1, key2;
