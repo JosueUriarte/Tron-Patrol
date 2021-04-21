@@ -1,4 +1,5 @@
-//const { Phaser } = require("../../lib/phaser");
+// TRON PATROL
+// CREATED BY JOSUE URIARTE REYES more info in main.js file
 
 class Menu extends Phaser.Scene {
     constructor() {

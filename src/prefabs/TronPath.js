@@ -1,3 +1,6 @@
+// TRON PATROL
+// CREATED BY JOSUE URIARTE REYES more info in main.js file
+
 class TronPath extends Phaser.GameObjects.Sprite {
     constructor(scene){
         super(scene);

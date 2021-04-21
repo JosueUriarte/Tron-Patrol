@@ -1,3 +1,6 @@
+// TRON PATROL
+// CREATED BY JOSUE URIARTE REYES more info in main.js file
+
 class Play extends Phaser.Scene{
     constructor() {
         super("playScene");

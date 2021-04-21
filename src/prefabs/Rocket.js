@@ -1,3 +1,6 @@
+// TRON PATROL
+// CREATED BY JOSUE URIARTE REYES more info in main.js file
+
 // Rocket (player) prefab
 class Rocket extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, LEFT, RIGHT, SHOOT){

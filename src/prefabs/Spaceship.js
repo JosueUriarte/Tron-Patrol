@@ -1,3 +1,6 @@
+// TRON PATROL
+// CREATED BY JOSUE URIARTE REYES more info in main.js file
+
 class Spaceship extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame, pointValue, shipSpeed){
         super(scene, x, y, texture, frame);
